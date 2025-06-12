@@ -43,7 +43,7 @@ public class BootStrapData implements CommandLineRunner {
         if(onStartEmptyInv) {
             //Add CPU
             OutsourcedPart cpu = new OutsourcedPart();
-            cpu.setCompanyName("WGU");
+            cpu.setCompanyName("AMD");
             cpu.setName("AMD CPU");
             cpu.setInv(5);
             cpu.setMin(1);
@@ -53,7 +53,7 @@ public class BootStrapData implements CommandLineRunner {
             outsourcedPartRepository.save(cpu);
             //Add Motherboard
             OutsourcedPart motherboard = new OutsourcedPart();
-            motherboard.setCompanyName("WGU");
+            motherboard.setCompanyName("ASUS");
             motherboard.setName("ASUS Motherboard");
             motherboard.setInv(5);
             motherboard.setMin(1);
@@ -63,7 +63,7 @@ public class BootStrapData implements CommandLineRunner {
             outsourcedPartRepository.save(motherboard);
             //Add RAM
             OutsourcedPart ram = new OutsourcedPart();
-            ram.setCompanyName("WGU");
+            ram.setCompanyName("HyperX");
             ram.setName("HyperX 2x16GB RAM");
             ram.setInv(5);
             ram.setMin(1);
@@ -73,7 +73,7 @@ public class BootStrapData implements CommandLineRunner {
             outsourcedPartRepository.save(ram);
             //Add GPU
             OutsourcedPart gpu = new OutsourcedPart();
-            gpu.setCompanyName("WGU");
+            gpu.setCompanyName("NVIDIA");
             gpu.setName("NVIDIA RTX 3060ti GPU");
             gpu.setInv(5);
             gpu.setMin(1);
@@ -83,7 +83,7 @@ public class BootStrapData implements CommandLineRunner {
             outsourcedPartRepository.save(gpu);
             //Add PSU
             OutsourcedPart psu = new OutsourcedPart();
-            psu.setCompanyName("WGU");
+            psu.setCompanyName("EVGA");
             psu.setName("EVGA 1000w PSU");
             psu.setInv(5);
             psu.setMin(1);
@@ -92,22 +92,6 @@ public class BootStrapData implements CommandLineRunner {
             psu.setId(105L);
             outsourcedPartRepository.save(psu);
         }
-       /*
-        OutsourcedPart o= new OutsourcedPart();
-        o.setCompanyName("Western Governors University");
-        o.setName("out test");
-        o.setInv(5);
-        o.setPrice(20.0);
-        o.setId(100L);
-        outsourcedPartRepository.save(o);
-        OutsourcedPart thePart=null;
-        List<OutsourcedPart> outsourcedParts=(List<OutsourcedPart>) outsourcedPartRepository.findAll();
-        for(OutsourcedPart part:outsourcedParts){
-            if(part.getName().equals("out test"))thePart=part;
-        }
-
-        System.out.println(thePart.getCompanyName());
-        */
         List<OutsourcedPart> outsourcedParts=(List<OutsourcedPart>) outsourcedPartRepository.findAll();
         for(OutsourcedPart part:outsourcedParts){
             System.out.println(part.getName()+" "+part.getCompanyName());
@@ -126,12 +110,6 @@ public class BootStrapData implements CommandLineRunner {
             productRepository.save(tier5);
         }
 
-        /*
-        Product bicycle= new Product("bicycle",100.0,15);
-        Product unicycle= new Product("unicycle",100.0,15);
-        productRepository.save(bicycle);
-        productRepository.save(unicycle);
-        */
 
         System.out.println("Started in Bootstrap");
         System.out.println("Number of Products"+productRepository.count());
