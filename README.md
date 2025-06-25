@@ -1,4 +1,4 @@
-# WebInventory
+# InventoryWebApp
 
 A sophisticated web application for managing store inventory.
 
