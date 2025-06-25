@@ -2,92 +2,164 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <!-- Bootstrap Darkly Theme from Bootswatch -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/darkly/bootstrap.min.css" rel="stylesheet">
     <title>North Custom PCs</title>
+    <style>
+        /* Custom styles for further polish */
+        body {
+            background: #181a1b;
+            color: #e0e0e0;
+        }
+        .card {
+            background: #23272b;
+            border-radius: 1rem;
+        }
+        .table {
+            background: #23272b;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .btn {
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+        .form-control {
+            background: #222426;
+            color: #e0e0e0;
+            border: 1px solid #444;
+        }
+        .form-control:focus {
+            background: #23272b;
+            color: #fff;
+        }
+        /* Add a subtle glow to primary buttons */
+        .btn-primary {
+            box-shadow: 0 0 8px 0 #0d6efd55;
+        }
+        /* Table row hover effect */
+        .table-hover tbody tr:hover {
+            background-color: #2c3034;
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>North Custom PCs Shop</h1>
-    <a th:href="about" class="btn btn-primary">About Us</a>
-    <hr>
-    <h2>PC Parts</h2>
-    <form th:action="@{/mainscreen}">
-        Filter: <input type="text" name="partkeyword" id="partkeyword" size="50" th:value="${partkeyword}" required />
-        &nbsp;
-        <input type="submit" value="Search" />
-        &nbsp;
-        <input type="button" value="Clear" id="btnClearPart" onclick="clearSearch()" />
-    </form>
-    <br><br>
-    <a th:href="@{/showFormAddInPart}" class="btn btn-primary btn-sm mb-3">Add Inhouse Part</a>
-    <a th:href="@{/showFormAddOutPart}" class="btn btn-primary btn-sm mb-3">Add Outsourced Part</a>
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Inventory</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="tempPart : ${parts}">
-            <td th:text="${tempPart.name}">1</td>
-            <td th:text="${tempPart.price}">1</td>
-            <td th:text="${tempPart.inv}">1</td>
-            <td><a th:href="@{/showPartFormForUpdate(partID=${tempPart.id})}" class="btn btn-primary btn-sm mb-3">Update</a>
-                <a th:href="@{/deletepart(partID=${tempPart.id})}" class="btn btn-primary btn-sm mb-3"
-                   onclick="if(!(confirm('Are you sure you want to delete this part?')))return false">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <h2>PC Products</h2>
-    <form th:action="@{/mainscreen}">
-        Filter: <input type="text" name="productkeyword" id="productkeyword" size="50" th:value="${productkeyword}" required />
-        &nbsp;
-        <input type="submit" value="Search" />
-        &nbsp;
-        <input type="button" value="Clear" id="btnClearProduct" onclick="clearSearch()" />
-    </form>
-    <script type="text/javascript">
-        function clearSearch() {
-            window.location = "[[@{/}]]";
-        }
-    </script>
-    <br><br>
-    <a th:href="@{/showFormAddProduct}" class="btn btn-primary btn-sm mb-3">Add Product</a>
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Inventory</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="tempProduct : ${products}">
-            <td th:text="${tempProduct.name}">1</td>
-            <td th:text="${tempProduct.price}">1</td>
-            <td th:text="${tempProduct.inv}">1</td>
-            <td><a th:href="@{/showProductFormForUpdate(productID=${tempProduct.id})}" class="btn btn-primary btn-sm mb-3">Update</a>
-                <a th:href="@{/deleteproduct(productID=${tempProduct.id})}" class="btn btn-primary btn-sm mb-3"
-                   onclick="if(!(confirm('Are you sure you want to delete this product?')))return false">Delete</a>
-                <a th:href="@{/buyProduct(productID=${tempProduct.id})}" class="btn btn-primary btn-sm mb-3">Buy</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<!--
+    North Custom PCs Shop - Inventory Management
+    This page allows users to search, add, update, and delete PC parts and products.
+-->
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold text-primary">North Custom PCs Shop</h1>
+        <a th:href="about" class="btn btn-outline-light rounded-pill px-4 py-2 shadow">About Us</a>
+    </div>
+    <!-- PC Parts Section -->
+    <div class="card shadow-lg mb-5">
+        <div class="card-body">
+            <h2 class="h4 mb-4 text-info">PC Parts</h2>
+            <!-- Search Form for Parts -->
+            <form th:action="@{/mainscreen}" class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <input type="text" name="partkeyword" id="partkeyword" class="form-control form-control-lg" placeholder="Search for a part..." th:value="${partkeyword}" required />
+                </div>
+                <div class="col-auto">
+                    <input type="submit" value="Search" class="btn btn-primary btn-lg" />
+                </div>
+                <div class="col-auto">
+                    <input type="button" value="Clear" id="btnClearPart" onclick="clearSearch()" class="btn btn-outline-secondary btn-lg" />
+                </div>
+            </form>
+            <!-- Add Part Buttons -->
+            <div class="mt-4 d-flex gap-3">
+                <a th:href="@{/showFormAddInPart}" class="btn btn-success btn-lg rounded-pill shadow">Add Inhouse Part</a>
+                <a th:href="@{/showFormAddOutPart}" class="btn btn-info btn-lg rounded-pill shadow text-white">Add Outsourced Part</a>
+            </div>
+        </div>
+    </div>
+    <!-- Parts Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle shadow-sm rounded">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Inventory</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tempPart : ${parts}">
+                <td th:text="${tempPart.name}">1</td>
+                <td th:text="${tempPart.price}">1</td>
+                <td th:text="${tempPart.inv}">1</td>
+                <td>
+                    <!-- Update and Delete buttons for each part -->
+                    <a th:href="@{/showPartFormForUpdate(partID=${tempPart.id})}" class="btn btn-primary btn-sm mb-2">Update</a>
+                    <a th:href="@{/deletepart(partID=${tempPart.id})}" class="btn btn-danger btn-sm mb-2" onclick="if(!(confirm('Are you sure you want to delete this part?')))return false">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- PC Products Section -->
+    <div class="card shadow-lg mb-5">
+        <div class="card-body">
+            <h2 class="h4 mb-4 text-info">PC Products</h2>
+            <!-- Search Form for Products -->
+            <form th:action="@{/mainscreen}" class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <input type="text" name="productkeyword" id="productkeyword" class="form-control form-control-lg" placeholder="Search for a product..." th:value="${productkeyword}" required />
+                </div>
+                <div class="col-auto">
+                    <input type="submit" value="Search" class="btn btn-primary btn-lg" />
+                </div>
+                <div class="col-auto">
+                    <input type="button" value="Clear" id="btnClearProduct" onclick="clearSearch()" class="btn btn-outline-secondary btn-lg" />
+                </div>
+            </form>
+            <!-- Add Product Button -->
+            <div class="mt-4">
+                <a th:href="@{/showFormAddProduct}" class="btn btn-success btn-lg rounded-pill shadow">Add Product</a>
+            </div>
+        </div>
+    </div>
+    <!-- Products Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle shadow-sm rounded">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Inventory</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tempProduct : ${products}">
+                <td th:text="${tempProduct.name}">1</td>
+                <td th:text="${tempProduct.price}">1</td>
+                <td th:text="${tempProduct.inv}">1</td>
+                <td>
+                    <!-- Update, Delete, and Buy buttons for each product -->
+                    <a th:href="@{/showProductFormForUpdate(productID=${tempProduct.id})}" class="btn btn-primary btn-sm mb-2">Update</a>
+                    <a th:href="@{/deleteproduct(productID=${tempProduct.id})}" class="btn btn-danger btn-sm mb-2" onclick="if(!(confirm('Are you sure you want to delete this product?')))return false">Delete</a>
+                    <a th:href="@{/buyProduct(productID=${tempProduct.id})}" class="btn btn-success btn-sm mb-2">Buy</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+<!-- Utility script for clearing search fields -->
+<script type="text/javascript">
+    // Redirects to the home page to clear search filters
+    function clearSearch() {
+        window.location = "[[@{/}]]";
+    }
+</script>
+
 </body>
 </html>
