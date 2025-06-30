@@ -3,6 +3,6 @@
 A sophisticated web application for managing store inventory.
 
 # Technology Stack
-Frontend: HTML
+Frontend: HTML/CSS
 
-Backend: Java, Springboot Framework, Maven
+Backend: Java, Springboot Framework, Maven, SQL
